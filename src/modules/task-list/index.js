@@ -15,7 +15,7 @@ function TaskList({ data, deleteTask, editTask }) {
       ...edit,
       [e.target.name]: value,
     })
-    console.log(edit);
+    // console.log(edit);
   }
 
   const [open, setOpen] = useState(
@@ -32,7 +32,7 @@ function TaskList({ data, deleteTask, editTask }) {
       { open.inputType === 'text' && open.id === id ? 
         <td><button onClick={ () => editATask(id) }>Save</button><button onClick={ onOpenForm }>Cancel</button></td>
         : 
-        <td><button onClick={ () => onOpenForm(id) }>Edit</button><button onClick={() => deleteATask(id)}>Delete</button></td>
+        <td><button onClick={ () => onOpenForm(id, items.task_name, items.description) }>Edit</button><button onClick={() => deleteATask(id)}>Delete</button></td>
       }
 
     </tr>
@@ -46,7 +46,7 @@ function TaskList({ data, deleteTask, editTask }) {
   //   const id = 2;
   // }
   
-  function onOpenForm(id) {
+  function onOpenForm(id, task_name, description) {
     
 
     if (open.inputType === 'hidden') {
@@ -55,6 +55,11 @@ function TaskList({ data, deleteTask, editTask }) {
         id: id,
         inputType: 'text',
       });
+      setEdit({
+        ...edit,
+        task_name: task_name,
+        description: description,
+      })
     }
     
     else {
@@ -65,7 +70,7 @@ function TaskList({ data, deleteTask, editTask }) {
       })
     }
     
-    console.log(open);
+    // console.log(open);
   }
   
   function editATask(id) {
