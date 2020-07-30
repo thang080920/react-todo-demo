@@ -1,0 +1,6 @@
+export const TASKLIST = 'TASKLIST'
+export const TASKLIST_ERROR = 'TASKLIST_ERROR'
+export const TASKLIST_SUCCESS = 'TASKLIST_SUCCESS'
+export const EDIT_TASK = 'EDIT_TASK'
+export const DELETE_TASK = 'DELETE_TASK'
+export const ADD_TASK = 'ADD_TASK'
