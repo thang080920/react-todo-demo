@@ -2,8 +2,13 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import * as actions from './actions';
 import CreateTask from '../create-task';
+import 'bootstrap/dist/css/bootstrap.min.css'
+// Put any other imports below so that CSS from your
+// components takes precedence over default styles.
+import './styles.css';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
-function TaskList({ data, deleteTask, editTask }) {
+function TaskList({ data, deleteTask, editTask, deleteAllTask }) {
 
   const [edit, setEdit] = useState(
     { task_name: '', description: '' }
@@ -11,12 +16,13 @@ function TaskList({ data, deleteTask, editTask }) {
 
   function handleChange(e) {
     const value = e.target.value;
-    setEdit({
-      ...edit,
-      [e.target.name]: value,
-    })
+      setEdit({
+        ...edit,
+        [e.target.name]: value,
+      })
     // console.log(edit);
   }
+
 
   const [open, setOpen] = useState(
     {
@@ -25,18 +31,54 @@ function TaskList({ data, deleteTask, editTask }) {
     }
   );
 
-  const listItem = data.map((items, id) =>
-    <tr key={id}>
-      <td> {open.inputType === 'text' && open.id === id ? <input type={open.inputType} placeholder={items.task_name} value={edit.task_name} name='task_name' onChange={handleChange}/> :<span>{items.task_name}</span> } </td>
-      <td> {open.inputType === 'text' && open.id === id ? <input type={open.inputType} placeholder={items.description} value={edit.description} name='description' onChange={handleChange} /> :<span>{items.description}</span>} </td>
-      { open.inputType === 'text' && open.id === id ? 
-        <td><button onClick={ () => editATask(id) }>Save</button><button onClick={ onOpenForm }>Cancel</button></td>
-        : 
-        <td><button onClick={ () => onOpenForm(id, items.task_name, items.description) }>Edit</button><button onClick={() => deleteATask(id)}>Delete</button></td>
-      }
+  // const listItem = data.map((items, id) =>
+  //   <tr key={id}>
+  //     <td> {open.inputType === 'text' && open.id === id ? <input type={open.inputType} placeholder={items.task_name} value={edit.task_name} name='task_name' onChange={handleChange}/> :<span>{items.task_name}</span> } </td>
+  //     <td> {open.inputType === 'text' && open.id === id ? <input type={open.inputType} placeholder={items.description} value={edit.description} name='description' onChange={handleChange} /> :<span>{items.description}</span>} </td>
+  //     { open.inputType === 'text' && open.id === id ? 
+  //       <td><button className='btn btn-success' onClick={ () => editATask(id) }>Save</button> <button className='btn btn-danger' onClick={ onOpenForm }>Cancel</button></td>
+  //       : 
+  //       <td><button className='col-lg-6 btn btn-info' onClick={ () => onOpenForm(id, items.task_name, items.description) }>Edit</button><button className='col-lg-6 btn btn-danger' onClick={() => deleteATask(id)}>Delete</button></td>
+  //     }
 
-    </tr>
+  //   </tr>
+  // );
+
+  const listItem = data.map((items, id) =>
+    <div onDoubleClick={open.inputType === 'hidden' ? () => onOpenForm(id, items.task_name, items.description) : () => editATask(id) } key={id} className={'items ' + items.priority}>
+      {
+      open.inputType === 'text' && open.id === id ?
+      
+      <form className='col-md-12 div'>
+        <div className='col-md-8 text-field'>
+            <label>Edit</label>
+            <input className='form-control' type={open.inputType} value={edit.task_name} name='task_name' onChange={handleChange}/>
+            <input className='form-control' type={open.inputType} value={edit.description} name='description' onChange={handleChange} />
+        </div>
+        <div className='col-md-4 button-field'>
+          <a href="#" onClick={ onOpenForm }>Cancel</a>
+          <p>Double-click to save</p>
+        </div>
+        </form>
+      
+      :
+      <div className='col-md-12 div'>
+        <div className='col-md-8 text-field'>
+          <h2>{ items.task_name }</h2> 
+          <p>{ items.description }</p>
+        </div>
+
+        <div className='col-md-4 button-field'>
+          <a href="#" onClick={() => deleteATask(id)}>Delete</a>
+          <p>Double-click to edit</p>
+        </div>
+      </div>
+
+      }
+      
+    </div>
   );
+
 
   // function editATask() {
   //   const editedTask = {
@@ -45,7 +87,13 @@ function TaskList({ data, deleteTask, editTask }) {
   //   };
   //   const id = 2;
   // }
-  
+  function onDeleteAll() {
+    var newData = [];
+
+    deleteAllTask(newData);
+  }
+
+
   function onOpenForm(id, task_name, description) {
     
 
@@ -59,7 +107,7 @@ function TaskList({ data, deleteTask, editTask }) {
         ...edit,
         task_name: task_name,
         description: description,
-      })
+      });
     }
     
     else {
@@ -76,11 +124,6 @@ function TaskList({ data, deleteTask, editTask }) {
   function editATask(id) {
     editTask(id, edit);
     onOpenForm();
-    setEdit({
-      ...edit,
-      task_name: '',
-      description: '',
-    })
     }
 
   function deleteATask(index) {
@@ -91,22 +134,26 @@ function TaskList({ data, deleteTask, editTask }) {
 
   return (
 
-    <div>
+    <div className='container'>
       <CreateTask />
-      <table>
-        <thead>
-          <tr>
-            <th>Task Name</th>
-            <th>Description</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {listItem}
-        </tbody>
-      </table>
-    </div>
+        <button className='btn btn-danger btn-block col-lg-12' onClick={onDeleteAll}>Delete All</button>
 
+      {/* <DragDropContext>
+        <Droppable>
+          <Draggable>
+      <div classname='test high'>
+        <span>test</span>
+        <p>hfefkafhehakhkjd</p>
+      </div>
+          </Draggable>
+        </Droppable>
+      </DragDropContext> */}
+      <div className='col-lg-12' style={{ paddingTop: '20px' }}>
+        {listItem}
+      </div>
+
+    </div>
+    
   )
 }
 
@@ -129,6 +176,10 @@ const mapDispatchToProps = (dispatch) => {
 
     editTask: (id, editedTask) => {
       dispatch(actions.editTask(id, editedTask))
+    },
+
+    deleteAllTask: (blank) => {
+      dispatch(actions.deleteAllTask(blank))
     }
   }
 }

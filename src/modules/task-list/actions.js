@@ -7,6 +7,13 @@ export function deleteTask(index) {
   }
 }
 
+export function deleteAllTask(blank) {
+  return {
+    type: C.DELETE_ALL_TASK,
+    blank,
+  }
+}
+
 export function addTask(newTask) {
   return {
     type: C.ADD_TASK,

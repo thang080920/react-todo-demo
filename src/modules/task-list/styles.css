@@ -1,0 +1,48 @@
+.items {
+  padding: 5px 0 5px 12px;
+  background: #FFFFFF;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.05);
+  border-radius: 3px;
+}
+
+.items:not(:first-child) {
+  margin-top: 10px;
+}
+
+.high {
+  border-left: 4px solid red;
+}
+
+.normal {
+  border-left: 4px solid #F2994A;
+}
+
+.low {
+  border-left: 4px solid #BDBDBD;
+}
+
+.div {
+  display: flex;
+}
+
+a {
+  text-align: right;
+  color: red;
+}
+
+a:hover {
+  color: #ad1a1a;
+  text-decoration: none;
+}
+
+.text-field {
+  padding-right: 0;
+}
+
+.button-field {
+  text-align: right;
+}
+
+.button-field p {
+  font-size: x-small;
+}

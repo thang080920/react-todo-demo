@@ -1,23 +1,10 @@
 import * as C from '../../app-constants';
+import data from '../../data/data.json';
 
 const initState = {
   loading: false,
   error: null,
-  data: [
-    {
-      'task_name': 'Demo 1',
-      'description': 'hahfiuhiawf',
-    },
-    {
-      'task_name': 'Demo 2',
-      'description': 'fjejadhe',
-    },
-    {
-      'task_name': 'Demo 3',
-      'description': 'fjejadhe',
-    },
-    
-  ],
+  data: data,
 };
 
 export function ListAllTask(state = initState, action) {
@@ -48,6 +35,11 @@ export function ListAllTask(state = initState, action) {
         data: newData,
       };
 
+    case C.DELETE_ALL_TASK:
+      return {
+        ...state,
+        data: action.blank,
+      };
     // case C.TASKLIST_ERROR:
     //   return {
     //     ...state,
