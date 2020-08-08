@@ -10,9 +10,12 @@ const initState = {
 export function ListAllTask(state = initState, action) {
   switch (action.type) {
     case C.ADD_TASK:
+      var newData = [...state.data];
+      newData.push(action.newTask)
+
       return {
         ...state,
-        data: [...state.data, action.newTask]
+        data: newData, 
       };
     
     case C.EDIT_TASK:
@@ -28,14 +31,16 @@ export function ListAllTask(state = initState, action) {
 
     case C.DELETE_TASK:
       
-      let newData = [...state.data];
-      newData.splice(action.index, 1);
+      let deletedData = [...state.data];
+      deletedData.splice(action.index, 1);
+
       return {
         ...state,
-        data: newData,
+        data: deletedData,
       };
 
     case C.DELETE_ALL_TASK:
+
       return {
         ...state,
         data: action.blank,
@@ -50,7 +55,10 @@ export function ListAllTask(state = initState, action) {
     //   return {
     //     ...state,
     //     token: action.payload,
+
+
       default:
-      return state;
+
+        return state;
     }
 }
